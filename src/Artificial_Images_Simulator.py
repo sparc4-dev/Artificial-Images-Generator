@@ -1,18 +1,26 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Este script cria uma imagem sintética, fornecido o modo de operação do CCD.
-# Utiliza-se uma fonte constante de fótons, que são convertidos em ADU de
-# acordo com o valor do ganho do CCD.
-# É utilizada uma tabela de ruído de leitura e uma imagem de bias para
-# adicionar ruído à imagem.
+
+# The Artificial Images Generator (AIG) algorithm creates an artificial image of a star that would be acquired by using a CCD camera.
+
+# To accomplish this task, initally the AIG creates a noise image based on the dark current noise, read noise,
+# and the sky noise. The dark current noise is calculated according to the model presented by Bernardes et. al ()
+# for the SPARC4 cameras. The read noise is calculated as a function of the CCD operation mode throught the
+# library Read_Noise_Calc. The sky noise is calculated through the Poisson noise of the sky flux
+# provided to the software.
+
+# The, the AIG creates a distribution of the star flux through a 2D-Gaussian Distribution. So, it is need
+# to provide to the AIG the star flux in photons/s, the sky flux in photons/s, and a standar deviation of the
+# Gaussian distribution. 
+
 
 #04/04/2020. Denis Varise Bernardes.
 
 import astropy.io.fits as fits
 import numpy as np
 import matplotlib.pyplot as plt
-import Read_Noise_Calculation_Bib as RNC
+import Read_Noise_Calc as RNC
 
 from astropy.table import Table
 from photutils.datasets import make_gaussian_prf_sources_image, make_gaussian_sources_image
@@ -25,44 +33,43 @@ from collections import OrderedDict
 from astropy.modeling.models import Moffat2D
 from photutils.datasets import make_model_sources_image
 
-class Create_Synthetic_Images:
+class Artificial_Images_Generator:
 
-    def __init__(self, ccd_temp, serial_number, star_amplitude, sky_flux, bias_name, image_dir, image_sigma):       
+    def __init__(self, star_flux, sky_flux, gaussian_stddev, ccd_operation_mode, ccd_temp=-70, serial_number=9916, bias_level=500, image_dir=''):
 
+        self.star_flux = star_flux
+        self.sky_flux = sky_flux                               
+        self.gaussian_stddev = gaussian_stddev
+        self.ccd_operation_mode = ccd_operation_mode
+          
         self.ccd_temp = ccd_temp
         self.serial_number = serial_number
-        self.image_name = ''   
-        if '.fits' not in bias_name: bias_name+='.fits'
-        self.bias_name = bias_name
-        if '\\' not in image_dir[-1]: image_dir+='\\'
+        if image_dir != '':        
+            if '\\' not in image_dir[-1]: image_dir+='\\'
         self.image_dir = image_dir
-        self.bias_level = 0     
-        
-        self.sky_flux = sky_flux #e-/pix/s                        
-        self.star_amplitude = star_amplitude
-        self.image_sigma = image_sigma        
-          
-        self.read_bias_image()
+        self.image_name = ''
+        self.bias_level = bias_level             
+
+        self.dark_current = 0
+        self.read_noise = 0
         self.hdr = []
 
 
-    def write_image_mode(self, mode):
-        self.em_mode = mode['em_mode']
+    def write_image_mode(self):        
+        self.em_mode = self.ccd_operation_mode['em_mode']
         self.noise_factor = 1
         self.em_gain = 1
         if self.em_mode == 1:
             self.noise_factor = 1.41            
-            self.em_gain = mode['em_gain']
-        self.preamp = mode['preamp']
-        self.hss = mode['hss']
-        self.bin = mode['bin']        
-        self.t_exp = mode['t_exp']        
+            self.em_gain = self.ccd_operation_mode['em_gain']
+        self.preamp = self.ccd_operation_mode['preamp']
+        self.hss = self.ccd_operation_mode['hss']
+        self.bin = self.ccd_operation_mode['bin']        
+        self.t_exp = self.ccd_operation_mode['t_exp']        
 
         self.gain = 0 #preamp gain
-        self.set_gain()        
-        self.dark_current = 0
-        self.set_dc() #função para setar a corrente de escuro
-        self.read_noise = 0
+        self.set_gain()          
+        self.set_dc()        
         self.calc_RN()
 
 
@@ -118,13 +125,7 @@ class Create_Synthetic_Images:
             self.dark_current = 9.67*np.exp(0.0012*T**2+0.25*T)
         if self.serial_number == 9917:
             self.dark_current = 5.92*np.exp(0.0005*T**2+0.18*T)
-
-
-    def read_bias_image(self):
-        image = fits.getdata(self.image_dir + self.bias_name).astype(float)        
-        bias_shape = image.shape
-        if bias_shape[0] == 1: self.bias_data = self.bias_data[0]
-        self.bias_level = np.median(image)
+            
 
 
     def calc_RN(self):
@@ -172,12 +173,12 @@ class Create_Synthetic_Images:
         preamp = '_PA' + str(self.preamp)
         binn = '_B' + str(self.bin)
         t_exp = '_TEXP'+ str(self.t_exp)
-        star_amp = '_S'+ str(self.star_amplitude)
+        star_flux = '_S'+ str(self.star_flux)
         
-        self.image_name = em_mode + hss + preamp + binn + t_exp + em_gain #+ star_amp
+        self.image_name = em_mode + hss + preamp + binn + t_exp + em_gain #+ star_flux
 
 
-    def create_synthetic_image(self):
+    def create_artificial_image(self):
         t_exp = self.t_exp
         em_gain = self.em_gain
         gain = self.gain
@@ -187,20 +188,9 @@ class Create_Synthetic_Images:
         sky = self.sky_flux
         nf = self.noise_factor
         binn = self.bin
-
-        #print(t_exp, em_gain, gain, bias, dc, rn, sky, nf) ,exit()
-        star_amplitude = self.star_amplitude * t_exp*em_gain*binn**2 / gain        
-##        table = Table()
-##        table['amplitude'] = [star_amplitude]
-##        table['x_0'] = [100]
-##        table['y_0'] = [100]
-##        table['gamma'] = [self.image_sigma]
-##        table['alpha'] = [1]
-##
+        
+        star_amplitude = self.star_flux * t_exp*em_gain*binn**2 / gain        
         shape = (200, 200)
-##        model = Moffat2D()        
-##        image = make_model_sources_image(shape, model, table)
-
         table = Table()
         table['amplitude'] = [star_amplitude]
         table['x_mean'] = [100]
@@ -211,32 +201,11 @@ class Create_Synthetic_Images:
         image = make_gaussian_sources_image(shape, table)                
 
         background_level = bias + (dc + sky) * t_exp * em_gain * binn**2 / gain        
-        image_noise = np.sqrt(rn**2 + (sky + dc)*t_exp * nf**2 * em_gain**2 * binn**2)
-        #print(background_level),exit()
-        #print(self.image_name, image_noise/gain)
+        image_noise = np.sqrt(rn**2 + (sky + dc)*t_exp * nf**2 * em_gain**2 * binn**2)        
+        
         noise_image = make_noise_image(shape, distribution='gaussian', mean=0, stddev=image_noise)/gain
         bias_image = make_noise_image(shape, distribution='gaussian', mean=background_level, stddev=0)
-        image+=noise_image+bias_image
-        #image_noise = np.sqrt(star * t_exp * nf**2 * em_gain**2 + n_pix * (rn**2 + (sky + dc)*t_exp * nf**2 * em_gain**2))
-        #image_noise = np.sqrt(rn**2 + (sky + dc)*t_exp * nf**2*em_gain**2)        
-        #poisson_noise = (sky + dc)*t_exp * em_gain
-        #gaussian_noise_image = make_noise_image(shape, distribution='gaussian', mean=0, stddev=rn)
-        #poisson_noise_image = make_noise_image(shape, distribution='poisson', mean=poisson_noise)
-        #bias_image = make_noise_image(shape, mean=bias, stddev=0)                               
-        #noise_image = (gaussian_noise_image + poisson_noise_image)/gain + bias_image
-        #print(np.mean(noise_image))       
-   
-
-##        y, x = np.indices(shape, dtype='float32')
-##        radius = 12.6217213865933
-##        working_mask = np.ones(shape,bool)
-##        r = np.sqrt((x - 100)**2 + (y - 100)**2)                    
-##        mask = (r < radius) * working_mask
-##        n_pix = len(np.where(mask)[0])
-##        star = sum(image[np.where(mask)])
-##        print(star),exit()
-
-        
+        image+=noise_image+bias_image               
         fits.writeto(self.image_dir + self.image_name+ '.fits', image, overwrite=True, header=self.hdr)
 
 
@@ -258,32 +227,13 @@ class Create_Synthetic_Images:
 
         
 
-mode = {"em_mode": 0, "hss": 1, "preamp": 1, "bin": 1, "t_exp": 20, "em_gain": 1}
-image_dir = r'C:\Users\denis\Desktop\UNIFEI\Projeto_Mestrado\Testes do codigo'
-json_file = 'INITIAL_SETUPS.txt'
-
-##modes=[]
-##with open(image_dir + '/' + json_file) as arq:
-##    lines = arq.read().split('}')
-##    del lines[-1]    
-##    arq.close()
-##    for line in lines:
-##        line+='}'        
-##        mode = json.loads(line)        
-##        modes.append(mode)   
-##    
-##    
-    
-##for mode in modes:
-CSI = Create_Synthetic_Images(ccd_temp=-60,
-                          serial_number=9917,                              
-                          star_amplitude = 2000, #e-/s
-                          sky_flux=12.298897076737294, #e-/pix/s                              
-                          bias_name='bias_final_002',
-                          image_dir = image_dir,
-                          image_sigma= 2)
-CSI.write_image_mode(mode)
-CSI.create_image_header()
-CSI.write_image_name()    
-CSI.create_synthetic_image()
-CSI.create_bias_image()
+ccd_operation_mode = {"em_mode": 0, "hss": 1, "preamp": 1, "bin": 1, "t_exp": 20, "em_gain": 1}
+AIG = Artificial_Images_Generator(star_flux = 2000, #e-/s
+                          sky_flux = 12.29, #e-/pix/s                 
+                          gaussian_stddev = 2,
+                          ccd_operation_mode = ccd_operation_mode)
+AIG.write_image_mode()
+AIG.create_image_header()
+AIG.write_image_name()    
+AIG.create_artificial_image()
+AIG.create_bias_image()
