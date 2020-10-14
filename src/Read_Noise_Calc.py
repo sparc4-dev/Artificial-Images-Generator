@@ -79,7 +79,7 @@ class ReadNoiseCalc:
                 if self.binn == 2:
                     indice_tab = 24
         
-        column_noise = self.read_tab_return_column('Tabelas_Valores_Ruido_Leitura.xlsm', 'Noise')
+        column_noise = self.read_tab_return_column('spreadsheet/Tabelas_Valores_Ruido_Leitura.xlsm', 'Noise')
         self.noise = column_noise[indice_tab]      
     
 
