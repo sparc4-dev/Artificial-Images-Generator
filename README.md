@@ -33,6 +33,21 @@ The next step is the creation of the star flux distribution. To accomplish this,
 <img src="https://latex.codecogs.com/svg.latex?f_p(x,y)=&space;C&space;e^{-&space;a(x&space;-&space;x_0)^2&space;\;&space;-&space;\;&space;b(x&space;-&space;x_0)&space;\times&space;(y&space;-&space;y_0)&space;\;&space;-&space;\;&space;c(y&space;-&space;y_0)^2}" title="f_p(x,y)= C e^{- a(x - x_0)^2 \; - \; b(x - x_0) \times (y - y_0) \; - \; c(y - y_0)^2}" />  
 </p>
 
+where
+
+<p align="center">
+<img src="https://latex.codecogs.com/svg.latex?a&space;=&space;\frac{cos(\theta)^2}{2\delta^2_x}&space;&plus;&space;\frac{sin(\theta)^2}{2\delta^2_y}" title="a = \frac{cos(\theta)^2}{2\delta^2_x} + \frac{sin(\theta)^2}{2\delta^2_y}" />
+</p>
+
+<p align="center">
+<img src="https://latex.codecogs.com/svg.latex?b&space;=&space;\frac{sin(2&space;\theta)^2}{2\delta^2_x}&space;-&space;\frac{sin(2&space;\theta)^2}{2\delta^2_y}" title="b = \frac{sin(2 \theta)^2}{2\delta^2_x} - \frac{sin(2 \theta)^2}{2\delta^2_y}" />
+</p>
+
+<p align="center">
+<img src="https://latex.codecogs.com/svg.latex?c&space;=&space;\frac{sin(\theta)^2}{2\delta^2_x}&space;&plus;&space;\frac{cos(\theta)^2}{2\delta^2_y}" title="c = \frac{sin(\theta)^2}{2\delta^2_x} + \frac{cos(\theta)^2}{2\delta^2_y}" />
+</p>
+
+
 f<sub>p</sub>(x,y) is the star intensity in ADU, C represents the maximum amplitude in ADU, x and y are the coordinates over the image in pixels,x<sub>0</sub> and y<sub>0</sub> are the star coordinates in pixels, &delta;<sub>x</sub> and &delta;<sub>y</sub> are the standard deviation of the Gaussian in the directions x and y, respectively; &theta; is the rotation angle of the Gaussian.
 
 The images created by the simulator have 200 x 200 pixels, the center coordinates of the star was fixed in (x<sub>0</sub>, y<sub>0</sub>) = (100,100) pixels; the values &delta;<sub>x</sub> and &delta;<sub>y</sub> should be provided to the software, and &theta; = 0. The maximum amplitude C, in ADU, for each mode is calculated through
