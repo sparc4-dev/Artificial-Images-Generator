@@ -1,7 +1,5 @@
 # Artificial Images Generator
-This repo contains the software of the Artificial Images Generator (AIG). The AIG was developed to create artificial star images, simulating the star images acquired by CCD cameras in astronomical. To create the images, the AIG models the star flux distribution as a 2D-Gaussian Distribution. This result is added to a noise image, created based a set of parameters provided to the software, as the CCD operation mode, the star flux and the sky flux. Figure below presents an example of an image created by the AIG
-
-This READ.ME explains step-by-step procedure of the AIG to create the imagens, as well as, it presents a simple execution example.
+This repo contains the software of the Artificial Images Generator (AIG). The AIG was developed to create artificial star images, simulating the star images acquired by the [SPARC4](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/8446/844626/Concept-of-SPARC4--a-simultaneous-polarimeter-and-rapid-camera/10.1117/12.924976.full?SSO=1) CCD cameras in astronomical observations. To create the images, the AIG models the star flux distribution as a 2D-Gaussian Distribution. This result is added to a noise image, created based a set of parameters provided to the software, as the CCD operation mode, the star flux and the sky flux. Figure below presents an example of an image created by the AIG. This READ.ME explains the step-by-step procedure of the AIG to create the imagens, as well as, it presents a simple execution example.
 
 
 <p align="center">
@@ -11,7 +9,9 @@ This READ.ME explains step-by-step procedure of the AIG to create the imagens, a
 
 ## Software Description
 
-The AIG is a software developed using the Python 3 language. It is operation can be divided in the parameters configuration step, the creation of a noise image step and, the creation of the star flux step. In the parameters configuration step, the AIG will calcute the gain, dark current noise and read noise of the CCD. The CCD gain is the converstion value of the acquired photoelectrons in Analogical-to-Ditial Unit (ADU). The dark current noise, in electrons, is the amount of thermoelectrons created by the dark current of the CCD, for its respective temperature. The read noise is a fluctuation in the value measured in each pixel of the CCD resulting of the readout process. The calculation of these paramters is given as a function of the operation mode of the CCD. Also, the calculation of the dark current noise and the read noise is bases on the characterization of the SPARC4 CCDs, presented by [Bernardes et al. (2018)](https://arxiv.org/abs/1806.02191).
+The AIG is a software developed using the Python 3 language. It is operation can be divided in the parameters configuration step, the creation of a noise image step and, the creation of the star flux step. 
+
+In the parameters configuration step, the AIG will calcute the gain, the dark current noise and the read noise of the CCD. The CCD gain is the converstion factor of the acquired photoelectrons in Analogical-to-Ditial Unit (ADU). The dark current noise is the amount of thermoelectrons per pixel created by the dark current of the CCD, for its respective temperature. The read noise is a fluctuation in the value measured in each pixel of the CCD resulting of the readout process. The calculation of these paramters is given as a function of the operation mode of the CCD. Also, the calculation of the dark current noise and the read noise is based on the characterization of the SPARC4 CCDs, presented by [Bernardes et al. (2018)](https://arxiv.org/abs/1806.02191).
 
 ## Getting Started
 
