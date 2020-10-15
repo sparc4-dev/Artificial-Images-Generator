@@ -25,7 +25,25 @@ where B represents the bias level of the CCD in ADU; the S<sub>dc</sub> is the m
 <img src="https://latex.codecogs.com/svg.latex?N&space;=&space;\sqrt{(S_{sky}&space;&plus;&space;S_{dc})&space;/&space;G&space;\times&space;\;&space;(N_F&space;\;&space;G_{em}&space;\;&space;B_{in})^2&space;&plus;&space;\sigma_{ADU}^2&space;}" title="N = \sqrt{(S_{sky} + S_{dc}) / G \times \; (N_F \; G_{em} \; B_{in})^2 + \sigma_{ADU}^2 }" />
 </p>
 
-where N<sub>F</sub> is an extra noise factor of the use of the Electron Multiplying mode, and it equals 1.4. For the Conventional Mode, N<sub>F</sub> = 1; &sigma;<sub>ADU</sub> is the read noise in ADU.
+where N<sub>F</sub> is an extra noise factor of the use of the Electron Multiplying mode, and it equals 1.4. For the Conventional Mode, N<sub>F</sub> = 1; &sigma;<sub>ADU</sub> is the read noise in ADU. At the end of this process, it is created the noise image, with a backgorund level B<sub>L</sub> and a gaussian distribution for the image pixels with a standard deviation of N.
+
+The next step is the creation of the star flux distribution. To accomplish this, it is used a 2D-Gaussian distribution provided by the [Astropy library](http://dx.doi.org/10.3847/1538-3881/aabc4f) as the star point spread function as follows:
+
+<p align="center">
+<img src="https://latex.codecogs.com/svg.latex?f_p(x,y)=&space;C&space;e^{-&space;a(x&space;-&space;x_0)^2&space;\;&space;-&space;\;&space;b(x&space;-&space;x_0)&space;\times&space;(y&space;-&space;y_0)&space;\;&space;-&space;\;&space;c(y&space;-&space;y_0)^2}" title="f_p(x,y)= C e^{- a(x - x_0)^2 \; - \; b(x - x_0) \times (y - y_0) \; - \; c(y - y_0)^2}" />  
+</p>
+
+f<sub>p</sub>(x,y) is the star intensity in ADU, C represents the maximum amplitude in ADU, x and y are the coordinates over the image in pixels,x<sub>0</sub> and y<sub>0</sub> are the star coordinates in pixels, &delta;<sub>x</sub> and &delta;<sub>y</sub> are the standard deviation of the Gaussian in the directions x and y, respectively; &theta; is the rotation angle of the Gaussian.
+
+The images created by the simulator have 200 x 200 pixels, the center coordinates of the star was fixed in (x<sub>0</sub>, y<sub>0</sub>) = (100,100) pixels; the values &delta;<sub>x</sub> and &delta;<sub>y</sub> should be provided to the software, and &theta; = 0. The maximum amplitude C, in ADU, for each mode is calculated through
+
+<p align="center">
+<img src="https://latex.codecogs.com/svg.latex?C&space;=&space;\frac{\beta&space;\times&space;t_{exp}&space;\times&space;G_{em}&space;\times&space;Bin^2}{G}" title="C = \frac{\beta \times t_{exp} \times G_{em} \times Bin^2}{G}" />
+</p>
+
+where &beta; simulates a constant photon flux over the CCD, and it should be provided to the software. Finally, the image noise and the star flux distribution are added up, and the resulting image is saved in the FITS format.
+
+
 
 ## Getting Started
 
