@@ -86,6 +86,15 @@ pip install json
 [Pandas](https://pandas.pydata.org/)
 ```
 pip install pandas
+```
+[xlrd](https://xlrd.readthedocs.io/en/latest/)
+```
+pip install xlrd
+```
+[Scipy](https://www.scipy.org/)
+```
+pip install scipy
+```
 
 ### Installing
 Clone this repo using ``` git clone https://github.com/DBernardes/Artificial-Images-Generator.git ```
