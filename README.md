@@ -16,16 +16,16 @@ In the parameters configuration step, the AIG will calcute the gain, the dark cu
 Then, it is created the noise image. To accomplish this, initially it is calculated the backgorund level (B<sub>L</sub>) of the image in ADU, as follows
 
 <p align="center">
-<img src="https://latex.codecogs.com/svg.latex?B_L&space;=&space;B&space;&plus;&space;\frac{(DC&space;&plus;&space;Sky)&space;\times&space;T_{exp}&space;\times&space;G_{em}&space;\times&space;Bin^2}{G}" title="B_L = B + \frac{(DC + Sky) \times T_{exp} \times G_{em} \times Bin^2}{G}" /></a>
+<img src="https://latex.codecogs.com/svg.latex?B_L&space;=&space;B&space;&plus;&space;(S_{dc}&space;&plus;&space;S_{sky})&space;\times&space;G_{em}&space;\times&space;B_{in}^2&space;/&space;G." title="B_L = B + (S_{dc} + S_{sky}) \times G_{em} \times B_{in}^2 / G." />
 </p>
 
-where B represents the bias level of the CCD in ADU; the DC is dark current of the CCD in e-/pix/s; the Sky is the sky flux in photons/pix/s; T<sub>exp</sub> is the exposure time in seconds; the G<sub>em</sub> is the Electron Multiplying Gain of the CCD; the Bin is the number of pixels binned in the reading process; the G is the gain of the CCD. Once obtained the brackgroun level, it is calculated the image noise (N), in ADU. This noise is composed by the contibutions of the sky noise, the dark current noise, and the read noise as follows
+where B represents the bias level of the CCD in ADU; the S<sub>dc</sub> is the mean of the thermoelectrons created by the CCD dark current, in e-/pix; the G<sub>em</sub> is the Electron Multiplying Gain of the CCD; the Bin is the number of pixels binned in the reading process; the G is the gain of the CCD. Once obtained the brackgroun level, it is calculated the image noise (N), in ADU. This noise is composed by the contibutions of the sky noise, the dark current noise, and the read noise as follows
 
 <p align="center">
 <img src="https://latex.codecogs.com/svg.latex?N&space;=&space;\sqrt{(S_{sky}&space;&plus;&space;S_{dc})&space;/&space;G&space;\times&space;\;&space;(N_F&space;\;&space;G_{em}&space;\;&space;B_{in})^2&space;&plus;&space;\sigma_{ADU}^2&space;}" title="N = \sqrt{(S_{sky} + S_{dc}) / G \times \; (N_F \; G_{em} \; B_{in})^2 + \sigma_{ADU}^2 }" />
 </p>
 
-where S<sub>sky</sub> is the sky flux in photons/pix; the S<sub>dc</sub> is the mean of the thermoelectrons created by the CCD dark current, in e-/pix; N<sub>F</sub> is an extra noise factor of the use of the Electron Multiplying mode, and it equals 1.4. For the Conventional Mode, N<sub>F</sub> = 1; &sigma;<sub>ADU</sub> is the read noise in ADU.
+where N<sub>F</sub> is an extra noise factor of the use of the Electron Multiplying mode, and it equals 1.4. For the Conventional Mode, N<sub>F</sub> = 1; &sigma;<sub>ADU</sub> is the read noise in ADU.
 
 ## Getting Started
 
