@@ -83,13 +83,16 @@ pip install collections
 ```
 pip install json
 ```
+[Pandas](https://pandas.pydata.org/)
+```
+pip install pandas
 
 ### Installing
 Clone this repo using ``` git clone https://github.com/DBernardes/Artificial-Images-Generator.git ```
 
 ## Running the tests
 
-To run a simple test, you only need to execute the run.py file and the image would be created at your current directory. The run.py file will provided to the software the basic information for the execution, that are: the star flux, in photons/s; the sky flux, in photons/pix/s, the standard deviation of the guassian, in pixels, and the operation mode of the CCD. In particular, the CCD operation mode should be a python dictonary with the control parameters used ot configure the acquistion of the SPARC4 cameras. They are the Electron Multiplying Mode (em_mode), the Electron Multiplying Gain (em_gain), the Pre-amplification (preamp), the Horizontal Shift Speed (hss), the Pixels Binning (bin), and the Exposure Time (texp). Below, it is presented the accepted values for each parameter previously described.
+To run a simple test, you only need to execute the run.py file and the image would be created at your current directory. The run.py file will provided to the software the basic information for the execution, that are: the star flux, in photons/s; the sky flux, in photons/pix/s, the standard deviation of the guassian, in pixels, and the operation mode of the CCD. In particular, the CCD operation mode should be a python dictonary with the control parameters used to configure the acquistion of the SPARC4 cameras. They are the Electron Multiplying Mode (em_mode), the Electron Multiplying Gain (em_gain), the Pre-amplification (preamp), the Horizontal Shift Speed (hss), the Pixels Binning (bin), and the Exposure Time (texp). Below, it is presented the accepted values for each parameter previously described.
 
 - em_mode: 0 or 1
 - em_gain: from 2 to 300
