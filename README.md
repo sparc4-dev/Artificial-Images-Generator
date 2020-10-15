@@ -67,13 +67,13 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 There are some packages that need to be installed before running the software.
 
-[Astropy](https://www.astropy.org/)
-[Photutils](https://photutils.readthedocs.io/en/stable/)
-[Collections](https://docs.python.org/3/library/collections.html)
-[JSON](https://www.w3schools.com/python/python_json.asp)
-[Pandas](https://pandas.pydata.org/)
-[xlrd](https://xlrd.readthedocs.io/en/latest/)
-[Scipy](https://www.scipy.org/)
+* [Astropy](https://www.astropy.org/)
+* [Photutils](https://photutils.readthedocs.io/en/stable/)
+* [Collections](https://docs.python.org/3/library/collections.html)
+* [JSON](https://www.w3schools.com/python/python_json.asp)
+* [Pandas](https://pandas.pydata.org/)
+* [xlrd](https://xlrd.readthedocs.io/en/latest/)
+* [Scipy](https://www.scipy.org/)
 
 To install these packages it is suggested to use the pip command as follows
 ```
