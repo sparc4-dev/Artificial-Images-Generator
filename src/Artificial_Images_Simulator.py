@@ -46,6 +46,7 @@ class Artificial_Images_Generator:
         #operation mode of the CCD.
         #This parameter should eb a python dictionary with:
         #Electron Multiplying Mode: "em_mode", 0 or 1
+        #Electron Multiplying Gain: "em_gain", from 2 to 300
         #Pre-amplification: "preamp", 1 or 2
         #Horizontal Shift Speed (MHz): "hss", 0.1, 1, 10, 20, or 30
         #Pixels Binning: "bin", 1 or 2
@@ -268,9 +269,7 @@ class Artificial_Images_Generator:
         shape = (200, 200)               
         background_level = bias     
         image_noise = rn      
-        noise_image = make_noise_image(shape, distribution='gaussian', mean=0, stddev=image_noise)/gain
-        bias_image = make_noise_image(shape, distribution='gaussian', mean=background_level, stddev=0)
-        image = noise_image + bias_image
-        fits.writeto(self.image_dir + self.image_name+ '_BIAS.fits', image, overwrite=True, header=self.hdr)       
+        noise_image = make_noise_image(shape, distribution='gaussian', mean=background_level, stddev=image_noise)/gain                
+        fits.writeto(self.image_dir + self.image_name+ '_BIAS.fits', noise_image, overwrite=True, header=self.hdr)       
 
 
