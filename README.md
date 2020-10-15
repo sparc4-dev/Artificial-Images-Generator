@@ -68,32 +68,16 @@ These instructions will get you a copy of the project up and running on your loc
 There are some packages that need to be installed before running the software.
 
 [Astropy](https://www.astropy.org/)
-```
-pip install astropy
-```
 [Photutils](https://photutils.readthedocs.io/en/stable/)
-```
-pip install photutils
-```
 [Collections](https://docs.python.org/3/library/collections.html)
-```
-pip install collections
-```
 [JSON](https://www.w3schools.com/python/python_json.asp)
-```
-pip install json
-```
 [Pandas](https://pandas.pydata.org/)
-```
-pip install pandas
-```
 [xlrd](https://xlrd.readthedocs.io/en/latest/)
-```
-pip install xlrd
-```
 [Scipy](https://www.scipy.org/)
+
+To install these packages it is suggested to use the pip command as follows
 ```
-pip install scipy
+pip install <package_name>
 ```
 
 ### Installing
