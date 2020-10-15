@@ -13,6 +13,14 @@ The AIG is a software developed using the Python 3 language. It is operation can
 
 In the parameters configuration step, the AIG will calcute the gain, the dark current noise and the read noise of the CCD. The CCD gain is the converstion factor of the acquired photoelectrons in Analogical-to-Ditial Unit (ADU). The dark current noise is the amount of thermoelectrons per pixel created by the dark current of the CCD, for its respective temperature. The read noise is a fluctuation in the value measured in each pixel of the CCD resulting of the readout process. The calculation of these paramters is given as a function of the operation mode of the CCD. Also, the calculation of the dark current noise and the read noise is based on the characterization of the SPARC4 CCDs, presented by [Bernardes et al. (2018)](https://arxiv.org/abs/1806.02191).
 
+Then, it is created the noise image. To accomplish this, initially it is calculated the backgorund level (B<sub>L</sub>) of the image in ADU, as follows
+
+<p align="center">
+<img src="https://latex.codecogs.com/svg.latex?B_L&space;=&space;B&space;&plus;&space;\frac{(DC&space;&plus;&space;Sky)&space;\times&space;T_{exp}&space;\times&space;G_{em}&space;\times&space;Bin^2}{G}" title="B_L = B + \frac{(DC + Sky) \times T_{exp} \times G_{em} \times Bin^2}{G}" /></a>
+</p>
+
+where B represents the bias level of the CCD in ADU; the DC is dark current of the CCD in e-/pix/s; the Sky is the sky flux in photons/pix/s; T<sub>exp</sub> is the exposure time in seconds; the G<sub>em</sub> is the Electron Multiplying Gain of the CCD; the Bin is the number of pixels binned in the reading process; the G is the gain of the CCD.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
