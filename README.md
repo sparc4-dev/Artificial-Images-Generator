@@ -50,7 +50,7 @@ where
 
 f<sub>p</sub>(x,y) is the star intensity in ADU, C represents the maximum amplitude in ADU, x and y are the coordinates over the image in pixels,x<sub>0</sub> and y<sub>0</sub> are the star coordinates in pixels, &delta;<sub>x</sub> and &delta;<sub>y</sub> are the standard deviation of the Gaussian in the directions x and y, respectively; &theta; is the rotation angle of the Gaussian.
 
-The images created by the simulator have 200 x 200 pixels, the center coordinates of the star was fixed in (x<sub>0</sub>, y<sub>0</sub>) = (100,100) pixels; the values &delta;<sub>x</sub> and &delta;<sub>y</sub> should be provided to the software, and &theta; = 0. The maximum amplitude C, in ADU, for each mode is calculated through
+The images created by the simulator have 200 x 200 pixels, the center coordinates of the star was fixed in (x<sub>0</sub>, y<sub>0</sub>) = (100,100) pixels; the values &delta;<sub>x</sub> = &delta;<sub>y</sub> and they should be provided to the software, and &theta; = 0. The maximum amplitude C, in ADU, for each mode is calculated through
 
 <p align="center">
 <img src="https://latex.codecogs.com/svg.latex?C&space;=&space;\frac{\beta&space;\times&space;t_{exp}&space;\times&space;G_{em}&space;\times&space;Bin^2}{G}" title="C = \frac{\beta \times t_{exp} \times G_{em} \times Bin^2}{G}" />
@@ -60,28 +60,36 @@ where &beta; simulates a constant photon flux over the CCD, and it should be pro
 
 
 
-## Getting Started
+## Running the AIG
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
-There are some packages that need to be installed before running the software. The first one is the Software Development Kit (SDK) developed by Andor Technology to control the CCDs. The second one is the GFITSIO package, used to save the data acquired by the camera in FITS format. 
+There are some packages that need to be installed before running the software.
 
-![Software Development Kit (SDK)](https://andor.oxinst.com/products/software-development-kit/)
-
-![GFITSIO](https://github.com/USNavalResearchLaboratory/GFITSIO)
-
+[Astropy](https://www.astropy.org/)
+```
+pip install astropy
+```
+[Photutils](https://photutils.readthedocs.io/en/stable/)
+```
+pip install photutils
+```
+[Collections](https://docs.python.org/3/library/collections.html)
+```
+pip install collections
+```
+[JSON](https://www.w3schools.com/python/python_json.asp)
+```
+pip install json
+```
 
 ### Installing
-Clone this repo using ``` git clone https://github.com/DBernardes/SPARC4_ACS.git ```
+Clone this repo using ``` git clone https://github.com/DBernardes/Artificial-Images-Generator.git ```
 
 ## Running the tests
-1. Before running the software, you need EMCCD to be connected to your PC.
-2. Open the project SPARC4_AC.lvproj.
-3. Run the VI SPARC4_GUI.vi.
-4. Wait until the camera starts.
-5. Set the night directory where the acquired images should be saved.
-6. Press the Acquire button to start an acquisition. This would allow you to obtain a FITS files in your directory with the data acquired by the camera.
+
+To run a simple test, you only need to execute the run.py file and the image would be created at yuor current directory.
 
 ## Authors and Contact
 
