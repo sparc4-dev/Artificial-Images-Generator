@@ -146,7 +146,7 @@ class Artificial_Images_Generator:
         RN = RNC.ReadNoiseCalc()    
         RN.write_operation_mode(self.em_mode, self.em_gain, self.hss, self.preamp, self.bin)
         RN.calc_read_noise()        
-        self.read_noise =  float(RN.noise)
+        self.read_noise = RN.calc_read_noise()
 
 
     def create_image_header(self):
