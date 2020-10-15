@@ -2,6 +2,7 @@
 # coding: utf-8
 
 #This file runs the Artificial Images Generator algorithm
+#For more information, access https://github.com/DBernardes/Artificial-Images-Generator
 
 #14/10/2020. Denis Varise Bernardes.
 

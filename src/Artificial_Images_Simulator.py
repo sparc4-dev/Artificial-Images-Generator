@@ -1,22 +1,19 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-
-# The Artificial Images Generator (AIG) algorithm creates an artificial image of a star that would be acquired by using a CCD camera.
-
-# To accomplish this task, initally the AIG creates a noise image based on the dark current noise, read noise,
-# and the sky noise. The dark current noise is calculated according to the model presented by Bernardes et. al ()
-# for the SPARC4 cameras. The read noise is calculated as a function of the CCD operation mode throught the
-# library Read_Noise_Calc. The sky noise is calculated through the Poisson noise of the sky flux
-# provided to the software.
-
-# The, the AIG creates a distribution of the star flux through a 2D-Gaussian Distribution. So, it is need
-# to provide to the AIG the star flux in photons/s, the sky flux in photons/s, and a standar deviation of the
-# Gaussian distribution. 
-
-
 #Author: Denis Varise Bernardes.
 #Date: 04/04/2020. 
+
+"""
+This file contains the software of the Artificial Images Generator (AIG). The AIG was developed to create artificial star images,
+simulating the star images acquired by the SPARC4 CCD cameras in astronomical observations. To create the images, the AIG models
+the star flux distribution as a 2D-Gaussian Distribution. This result is added to a noise image, created based a set of parameters
+provided to the software, as the CCD operation mode, the star flux and the sky flux. Figure below presents an example of an image
+created by the AIG.
+
+For more information, access https://github.com/DBernardes/Artificial-Images-Generator
+"""
+
+
 
 import astropy.io.fits as fits
 import numpy as np
@@ -43,14 +40,7 @@ class Artificial_Images_Generator:
         self.sky_flux = sky_flux
         #standard deviaion of the 2D-Gaussian Distribution in pixels
         self.gaussian_stddev = gaussian_stddev
-        #operation mode of the CCD.
-        #This parameter should eb a python dictionary with:
-        #Electron Multiplying Mode: "em_mode", 0 or 1
-        #Electron Multiplying Gain: "em_gain", from 2 to 300
-        #Pre-amplification: "preamp", 1 or 2
-        #Horizontal Shift Speed (MHz): "hss", 0.1, 1, 10, 20, or 30
-        #Pixels Binning: "bin", 1 or 2
-        #Exposure Time (s): "texp", greater than 1e-5
+        #operation mode of the CCD.        
         self.ccd_operation_mode = ccd_operation_mode
         #CCD temperature. It should be between 0 ºC to -70 ºC  
         self.ccd_temp = ccd_temp
@@ -65,11 +55,9 @@ class Artificial_Images_Generator:
         #Name of the createde image. It is automatically generated.
         self.image_name = ''
 
-        #Dark current of the CCD.
-        #It is calculated based on the DC characterization of the SPARC4 cameras presented by Bernardes et. al
+        #Dark current of the CCD.        
         self.dark_current = 0
-        #Read noise of the CCD.
-        #It is also calculated based on the characterization of the SPARC4 cameras
+        #Read noise of the CCD.        
         self.read_noise = 0
         #Gain of the CCD in e-/ADU
         self.gain = 0
@@ -139,9 +127,7 @@ class Artificial_Images_Generator:
 
 
     def set_dc(self):
-        #This function calculates the dark current of the CCD.
-        #This calculation is based on a model adjusted for the SPARC4 cameras by Bernardes et. al
-        #(link)
+        #This function calculates the dark current of the CCD.       
         T = self.ccd_temp
         if self.serial_number == 9914:
             self.dark_current = 24.66*np.exp(0.0015*T**2+0.29*T) 
@@ -220,10 +206,7 @@ class Artificial_Images_Generator:
         binn = self.bin
         gaussian_stddev = self.gaussian_stddev
 
-        #First, it is setted the guassian amplitude based on the paramter provided to the software.
-        #The gaussian amplitude is given by the star flux multiplyied by the exposure time, the
-        #EM amplification gain, and the number of binned pixels. This result is divided by the
-        #CCD gain to obtain the gaussian amplitude in counts units.
+        #Calculation of the guassian amplitude based on the parameters provided to the software.        
         gaussian_amplitude = self.star_flux * t_exp * em_gain * binn**2 / gain
         #The create image has 200 x 200 pixels
         shape = (200, 200)
@@ -243,22 +226,21 @@ class Artificial_Images_Generator:
         star_image = make_gaussian_sources_image(shape, table)                
 
 
-        #Then, it is calculated the background level of the image.
-        #It is given by the bias level, plus the contribution of the sky flux and the dark current for
-        #the respective CCD configuration
+        #Calculation of the background level of the image.        
         background_level = bias + (dc + sky) * t_exp * em_gain * binn**2 / gain
-        #This is the total noise of the image. It is composed by the read noise and the dark current noise
-        # of the CCD, and the sky noise
+        #Calculation of the image noise
         image_noise = np.sqrt(rn**2 + (sky + dc)*t_exp * nf**2 * em_gain**2 * binn**2)/gain               
         #This command creates a noise image with a Gaussian Distribution. This image has counts distribution
         # arround zero, for the noise calculated in the previous step.
         noise_image = make_noise_image(shape, distribution='gaussian', mean=background_level, stddev=image_noise)
         #Adds the noise image to the star image
         star_image+=noise_image
+        #Save in FITS format
         fits.writeto(self.image_dir + self.image_name + '.fits', star_image, overwrite=True, header=self.hdr)
 
 
     def create_bias_image(self):
+        #This function creates a bias image: image without light incidente.
         t_exp = 1e-5
         em_gain = self.em_gain
         gain = self.gain
