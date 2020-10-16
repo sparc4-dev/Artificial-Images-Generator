@@ -94,7 +94,7 @@ To run a simple test, you only need to execute the run.py file and the image wou
 - bin: 1 or 2
 - texp: greater or equal than 1e-5
 
-Beyond the paramater presented previously, there are a set of optional paramaters. They are the CCD temperature (ccd_temp), the CCD serial number (serial_number), the image bias level (bias_level), and the directory where the image should be saved (image_dir)
+Beyond the paramaters presented before, there are a set of optional paramaters. They are the CCD temperature (ccd_temp), the CCD serial number (serial_number), the image bias level (bias_level), and the directory where the image should be saved (image_dir)
 
 - ccd_temp: from 0 ºC to -70 ºC
 - serial_number: 9914, 9915, 9916, or 9917
